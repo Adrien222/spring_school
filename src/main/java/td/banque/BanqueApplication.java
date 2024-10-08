@@ -1,16 +1,11 @@
 package td.banque;
 
-import org.springframework.boot.CommandLineRunner;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Bean;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.context.annotation.*;
 import td.banque.model.*;
 import td.banque.repository.*;
-
-import java.util.*;
+import java.sql.Date;
 
 @SpringBootApplication
 public class BanqueApplication {
@@ -358,22 +353,22 @@ public class BanqueApplication {
 
             // Création d'un Produit Bancaire
             ProduitBancaire pb1 = new ProduitBancaire(1000, "123456789", cg1);
-            produitBancaireRepository.save(pb1); // Sauvegarder d'abord le produit bancaire
+            produitBancaireRepository.save(pb1);
 
-            // Création d'Opérations
-            Operation op1 = new Operation(new Date(), 500, "Retrait", "ATM", pb1);
-            Operation op2 = new Operation(new Date(), 200, "Dépôt", "Agence", pb1);
+            // Création d'Opérations avec java.sql.Date
+            Date dateOp1 = new Date(System.currentTimeMillis());  // Utilisation correcte de java.sql.Date
 
-            // Sauvegarder d'abord les opérations avant de les ajouter
-            operationRepository.save(op1);
-            operationRepository.save(op2);
+            // Création des opérations
+            Operation op1 = new Operation(dateOp1, 500, "Retrait", "ATM", pb1);
+            Operation op2 = new Operation(dateOp1, 200, "Dépôt", "Agence", pb1);
 
             // Ajouter les opérations au produit bancaire
             pb1.addOperation(op1);
             pb1.addOperation(op2);
 
-            // Sauvegarder le produit bancaire avec ses opérations
-            produitBancaireRepository.save(pb1);
+            // Sauvegarder les opérations
+            operationRepository.save(op1);
+            operationRepository.save(op2);
 
             // Affichage des opérations liées au produit bancaire
             System.out.println("Opérations liées au Produit Bancaire:");

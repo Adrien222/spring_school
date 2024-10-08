@@ -1,10 +1,8 @@
 package td.banque.model;
 
 import jakarta.persistence.*;
-import java.util.Date;
+import java.sql.Date;
 import java.util.Objects;
-
-import static jakarta.persistence.GenerationType.SEQUENCE;
 
 @Entity
 public class Operation {
@@ -16,20 +14,18 @@ public class Operation {
             allocationSize = 1
     )
     @GeneratedValue(
-            strategy = SEQUENCE,
+            strategy = GenerationType.SEQUENCE,
             generator = "operation_sequence"
     )
-    @Column(
-            name = "id"
-    )
+    @Column(name = "id")
     private Long id;
 
     @Column(
             name = "date_operation",
-            nullable = false
+            nullable = false,
+            columnDefinition = "DATE"
     )
-    @Temporal(TemporalType.DATE)
-    private Date dateOperation;
+    private Date dateOperation;  // Utilisation de java.sql.Date
 
     @Column(
             name = "montant",
@@ -131,7 +127,7 @@ public class Operation {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Operation operation = (Operation) o;
-        return id.equals(operation.id);
+        return id != null && id.equals(operation.id);  // Vérification que l'ID n'est pas null
     }
 
     @Override
