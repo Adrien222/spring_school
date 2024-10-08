@@ -190,7 +190,7 @@ public class BanqueApplication {
 //        };
 //    }
 
-    @Bean
+    /*@Bean
     CommandLineRunner seedData(
             ConditionsGeneralesRepository conditionsGeneralesRepository,
             PersonneRepository personneMoraleRepository,
@@ -294,9 +294,9 @@ public class BanqueApplication {
                     "***********************************************************");
             System.out.println(personneMoraleRepository.findAll());
         };
-    }
+    }*/
 
-    @Bean
+    /*@Bean
     CommandLineRunner testClientBancaireProduitBancaire(
             ClientBancaireRepository clientBancaireRepository,
             ProduitBancaireRepository produitBancaireRepository,
@@ -343,6 +343,42 @@ public class BanqueApplication {
             System.out.println("Client Bancaire 2 - Produits Bancaires:");
             cb2.getProduitsBancaires().forEach(System.out::println);
         };
-    }
+    }*/
 
+    @Bean
+    CommandLineRunner testProduitBancaireOperation(
+            ProduitBancaireRepository produitBancaireRepository,
+            OperationRepository operationRepository,
+            ConditionsGeneralesRepository conditionsGeneralesRepository
+    ) {
+        return args -> {
+            // Création de Conditions Générales
+            ConditionsGenerales cg1 = new ConditionsGenerales((float) 0.5, "CG1", 10);
+            conditionsGeneralesRepository.save(cg1);
+
+            // Création d'un Produit Bancaire
+            ProduitBancaire pb1 = new ProduitBancaire(1000, "123456789", cg1);
+            produitBancaireRepository.save(pb1); // Sauvegarder d'abord le produit bancaire
+
+            // Création d'Opérations
+            Operation op1 = new Operation(new Date(), 500, "Retrait", "ATM", pb1);
+            Operation op2 = new Operation(new Date(), 200, "Dépôt", "Agence", pb1);
+
+            // Sauvegarder d'abord les opérations avant de les ajouter
+            operationRepository.save(op1);
+            operationRepository.save(op2);
+
+            // Ajouter les opérations au produit bancaire
+            pb1.addOperation(op1);
+            pb1.addOperation(op2);
+
+            // Sauvegarder le produit bancaire avec ses opérations
+            produitBancaireRepository.save(pb1);
+
+            // Affichage des opérations liées au produit bancaire
+            System.out.println("Opérations liées au Produit Bancaire:");
+            pb1.getOperations().forEach(System.out::println);
+        };
+    }
 }
+

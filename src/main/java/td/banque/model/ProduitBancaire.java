@@ -1,7 +1,8 @@
 package td.banque.model;
 
 import jakarta.persistence.*;
-
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Objects;
 
 import static jakarta.persistence.GenerationType.SEQUENCE;
@@ -43,10 +44,13 @@ public class ProduitBancaire {
     @JoinColumn(name = "conditions_generales_id")
     private ConditionsGenerales conditionsGenerales;
 
-    // Ajout de la relation Many-to-One avec ClientBancaire
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "client_bancaire_id")
     private ClientBancaire clientBancaire;
+
+    // Relation One-to-Many avec Operation
+    @OneToMany(mappedBy = "produitBancaire", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Operation> operations = new HashSet<>();
 
     public ProduitBancaire(float solde_courant, String numeroCompte, ConditionsGenerales conditionsGenerales) {
         this.solde_courant = solde_courant;
@@ -98,6 +102,24 @@ public class ProduitBancaire {
         this.clientBancaire = clientBancaire;
     }
 
+    public Set<Operation> getOperations() {
+        return operations;
+    }
+
+    public void setOperations(Set<Operation> operations) {
+        this.operations = operations;
+    }
+
+    public void addOperation(Operation operation) {
+        operations.add(operation);
+        operation.setProduitBancaire(this);
+    }
+
+    public void removeOperation(Operation operation) {
+        operations.remove(operation);
+        operation.setProduitBancaire(null);
+    }
+
     @PreRemove
     private void gererLiens() {
         if (conditionsGenerales != null) {
@@ -109,6 +131,11 @@ public class ProduitBancaire {
             clientBancaire.getProduitsBancaires().remove(this);
         }
         clientBancaire = null;
+
+        for (Operation operation : this.operations) {
+            operation.setProduitBancaire(null);
+        }
+        this.operations.clear();
     }
 
     @Override
