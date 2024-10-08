@@ -107,10 +107,16 @@ public class BanqueApplication {
 //            personneMoraleRepository.deleteAll();
 //            personnePhysiqueRepository.deleteAll();
 //
+//             //Creation de type Personne moral
+//            TypePersonneMorale type1 =  new TypePersonneMorale("Etat");
+//            TypePersonneMorale type2 =  new TypePersonneMorale("Collectivite");
+////
 //            // Création de trois personnes morales
-//            PersonneMorale pm1=new PersonneMorale("102bis rue du Vesuve","SIRET1", "Pizza Tonio", "Association Loi 1901");
-//            PersonneMorale pm2=new PersonneMorale("45 Boulevard du fleuve","SIRET2", "Meubles cosy", "");
-//            PersonneMorale pm3=new PersonneMorale("14 allee des platanes","SIRET3", "Espaces tres verts", "");
+//            PersonneMorale pm1=new PersonneMorale("102bis rue du Vesuve","SIRET1", "Pizza Tonio", type1);
+//            PersonneMorale pm2=new PersonneMorale("45 Boulevard du fleuve","SIRET2", "Meubles cosy", type1);
+//            PersonneMorale pm3=new PersonneMorale("14 allee des platanes","SIRET3", "Espaces tres verts", type2);
+
+//            // Enregistrement en base
 //            // Enregistrement en base
 //            personneMoraleRepository.save(pm1);
 //            personneMoraleRepository.save(pm2);
