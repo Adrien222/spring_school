@@ -1,5 +1,6 @@
 package td.banque.model;
 
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -54,6 +55,7 @@ public class ConditionsGenerales {
             fetch = FetchType.EAGER,
             cascade = {CascadeType.ALL},
             orphanRemoval = true)
+    @JsonIgnore
     private Set<ProduitBancaire> produitsBancaires=new HashSet<>();
 
     public ConditionsGenerales() {}
