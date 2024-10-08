@@ -1,8 +1,7 @@
 package td.banque.repository;
 
-import org.springframework.data.jpa.repository.*;
-import td.banque.model.*;
+import org.springframework.data.jpa.repository.JpaRepository;
+import td.banque.model.ProduitBancaire;
 
-
-public interface ProduitBancaireRepository <T extends ProduitBancaire> extends JpaRepository<T, Integer>
-{ }
+public interface ProduitBancaireRepository extends JpaRepository<ProduitBancaire, Long> {
+}
